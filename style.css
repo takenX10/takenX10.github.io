@@ -1,0 +1,7 @@
+#top-header{
+    background-image: url("img/squadra2.jpg");
+    background-color: rgba(255, 255, 255, 0.8);
+    background-size: cover;
+    background-position: center;
+    background-position-z: -1;
+}
