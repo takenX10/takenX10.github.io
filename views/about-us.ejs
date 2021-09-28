@@ -1,7 +1,44 @@
 <%- include('partials/head.ejs') %>
 <%- include('partials/navbar.ejs') %>
 <body class="container-fluid mx-0">
-    
-<h1>WIP</h1>
+    <div class="container-fluid justify-content-center">
+        <div class="row justify-content-center px-auto">
+            <div class="col-9 text-center">
+                <h2> About us </h2>
+            </div>
+            <div class="col-9 text-center">
+                <p class="c-12"> Actual members of the team:</p>
+            </div>
+        </div>
+        <!-- Here we should parse all the elements, these are just test ones-->
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-2 col-xs-8 align-content-center d-md-block d-flex justify-content-center">
+                    <img src="/img/davide.jpeg" class="img-fluid" style="max-height: 100%">
+                </div>
+                <div class="col-8">
+                        <!-- TODO: Set the right href for every member-->
+                        <!-- TODO: Add hover effect to the link-->
+                        <a href="x" class="text-reset"><h2 class="pt-4 pt-md-0">Prof. Davide Maiorca - Founder</h2></a>
+                        <p class="fw-bold fs-5 py-4">astralXploit0 - Coach and Captain</p>
+                        <p class="fw-lighter font-monospace fs-5">Categories: Reversing, Pwn, Forensics <br>High School: Computer Science at ITIS Dionigi Scano (Cagliari)<br>Bachelor degree: Computer Science at UNICA (Cagliari) (Ongoing)</p>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-2 col-xs-8 align-content-center d-md-block d-flex justify-content-center">
+                    <img src="/img/daniele.jpg" class="img-fluid" style="max-height: 100%">
+                </div>
+                <div class="col-8">
+                        <!-- TODO: Set the right href for every member-->
+                        <!-- TODO: Add hover effect to the link-->
+                        <a href="x" class="text-reset"><h2 class="pt-4 pt-md-0">Daniele Pusceddu</h2></a>
+                        <p class="fw-bold fs-5 py-4">daniele - Member since: 2019</p>
+                        <p class="fw-lighter font-monospace fs-5">Categories: Pwn, OSINT, Misc <br>Assistant Professor of Computer Engineering @ University of Cagliari, Italy</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 
 <%- include('partials/footer.ejs') %>
