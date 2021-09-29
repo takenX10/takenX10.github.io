@@ -1,0 +1,13 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/navbar.ejs') %>
+<script src='scripts/writeups.js'></script>
+<title>Srdnlen – UniCA CTF Team</title>
+<body class="container-fluid">
+    <div id='writeup-text'>
+        
+    </div>
+<script>
+    parseText("<%- content %>");
+</script>
+<%- include('partials/footer.ejs') %>
+
