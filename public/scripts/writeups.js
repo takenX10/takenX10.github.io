@@ -75,7 +75,6 @@ function parseText(text){
                     */
                     // Alone links
                     let reg = new RegExp(`http(s)?:\\/\\/.*?([ \\0\\n<]|$)`, 'gm');
-                    console.log(w[j]);
                     w[j] = w[j].replace(reg, function(x){
                         const itemset = new Set(['\0','<','\n',' ']);
                         var last = '';
@@ -89,7 +88,7 @@ function parseText(text){
                         }
                         return '<a href="'+x+'">'+x+'</a>'+last;
                     });
-                    // images
+                    // Images
                     reg = new RegExp(`\\!\\[.*?\\]\\(.*?\\)`, 'gm');
                     w[j] = w[j].replace(reg, function(x){
                         var alt = x.split(']')[0];
@@ -101,7 +100,6 @@ function parseText(text){
                     // Links
                     reg = new RegExp(`\\[.*?\\]\\(.*?\\)`, 'gm');
                     w[j] = w[j].replace(reg, function(x){
-                        console.log(x);
                         var alt = x.split(']')[0];
                         alt = alt.substring(1,alt.length);
                         var url = x.split('(')[1];
