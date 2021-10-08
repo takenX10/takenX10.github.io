@@ -1,7 +1,7 @@
  
  // thanks to StackOverflow.
  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/\t/g,'&emsp;').replace(/&lt;br&gt;/g,'<br>');
 }
 var inlineCodeStyle = 'display: inline-block; margin-bottom: 0; color:red';
 var inlineCodeClass = '';
@@ -95,7 +95,7 @@ function parseText(text){
                         alt = alt.substring(2,alt.length);
                         var url = x.split('(')[1];
                         url = url.substring(0,url.length-1);
-                        return '<img src="'+url+'"'+imgTags+'>';
+                        return '<br><img src="'+url+'"'+imgTags+'><br>';
                     });
                     // Links
                     reg = new RegExp(`\\[.*?\\]\\(.*?\\)`, 'gm');
@@ -107,6 +107,7 @@ function parseText(text){
                         return '<a href="'+url+'">'+alt+'</a> ';
                     });
                 }else{
+                    
                     w[j] = '<p style="'+inlineCodeStyle+'" class="'+inlineCodeClass+'">' + w[j] + '</p>';
                 } 
             }
@@ -115,6 +116,7 @@ function parseText(text){
                 t[i] += w[j];
             }
         }else{
+            t[i] = t[i].replace(/\n/gm, '<br>');
             t[i] = '<br><p style="'+codeStyle+'" class="'+codeClass+'">' + escapeHtml(t[i]) + '</p><br>';
         }
     }

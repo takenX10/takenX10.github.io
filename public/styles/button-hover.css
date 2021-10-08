@@ -1,0 +1,11 @@
+
+.hover-effect:hover{
+    border-color: blue !important;
+    color: blue;
+    cursor: pointer;
+    transition: 0.3s linear;
+}
+
+.hover-effect{
+    border-color:aqua;
+}

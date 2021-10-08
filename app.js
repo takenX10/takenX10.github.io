@@ -26,6 +26,10 @@ app.get('/about-us', (req, res) => {
     res.render('about-us');
 });
 
+app.get('/parser', (req, res) => {
+  res.render('parser');
+});
+
 app.get('/writeup-1', (req, res) => {
   const data = fs.readFileSync('json/writeup.json', 'utf8');
 

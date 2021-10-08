@@ -1,0 +1,14 @@
+<%- include('partials/head.ejs') %>
+<link rel="stylesheet" href="styles/button-hover.css">
+<%- include('partials/navbar.ejs') %>
+<body class='container-fluid'>
+    <div class="row justify-content-evenly">
+        <div class="m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="window.location='/members';">
+            <p class='fs-1'>Members</p>
+        </div>
+        <div class="m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="window.location='/writeups';">
+            <p class='fs-1'>Writeups</p>
+        </div>
+    </div>
+
+<%- include('partials/footer.ejs') %>
