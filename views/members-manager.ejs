@@ -1,0 +1,56 @@
+<%- include('partials/head.ejs') %>
+<link rel="stylesheet" href="../styles/button-hover.css">
+<script src='../scripts/manager.js'></script>
+<script src='../scripts/post_sender.js'></script>
+<%- include('partials/navbar.ejs') %>
+<body class='container-fluid'>
+    <div class="row justify-content-left">
+        <div class="col-4">
+            <a href="../e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/manager" class="btn btn-dark p-2 btn-lg" role="button" aria-pressed="true">Back</a>
+        </div>
+    </div>
+    <div class="row justify-content-evenly buttons-class" style='display:flex'>
+        <div class="d-flex align-content-center justify-content-center m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="add_show()">
+            <p class='fs-1'>Add member</p>
+        </div>
+        <div class="d-flex align-content-center justify-content-center m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="window.location='/writeups';">
+            <p class='fs-1'>Remove member</p>
+        </div>
+    </div>
+    <div class="my-4 add" style='display:none'>
+        <div class="row justify-content-center">
+            <form class="col-11 col-md-9" action='add-manager' method='post'>
+                <input type='hidden' value='members'>
+                <div class="form-group my-4">
+                    <label for="Name">Member name</label>
+                    <input type="Name" class="form-control" id="Name" aria-describedby="Name" placeholder="Enter Name">
+                </div>
+                <div class="form-group my-4">
+                    <label for="Nickname">Nickname</label>
+                    <input type="Nickname" class="form-control" id="Nickname" aria-describedby="Nickname" placeholder="Enter Nickname">
+                </div>
+                <div class="form-group my-4">
+                    <label for="Description">Description</label>
+                    <textarea type="Description" class="form-control" id="Description" placeholder="Categories: ...&#10;University ..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', event => {
+            var data = {
+                "type": form[0].value,
+                "Name": form[1].value,
+                "Nickname": form[2].value,
+                "Description":form[3].value
+            };
+            postData('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-manager',data)
+            .then(data => {
+                console.log('ok');
+            });
+            event.preventDefault();
+        });
+    </script>
+<%- include('partials/footer.ejs') %>

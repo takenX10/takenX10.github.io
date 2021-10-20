@@ -3,7 +3,7 @@
     border-color: blue !important;
     color: blue;
     cursor: pointer;
-    transition: 0.3s linear;
+    transition: 0.2s linear;
 }
 
 .hover-effect{

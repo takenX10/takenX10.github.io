@@ -1,0 +1,38 @@
+<%- include('partials/head.ejs') %>
+<link rel="stylesheet" href="../styles/button-hover.css">
+<script src='../scripts/manager.js'></script>
+<%- include('partials/navbar.ejs') %>
+<body class='container-fluid'>
+    <div class="row justify-content-left">
+        <div class="col-4">
+            <a href="../e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/manager" class="btn btn-dark p-2 btn-lg" role="button" aria-pressed="true">Back</a>
+        </div>
+    </div>
+    <div class="row justify-content-evenly buttons-class" style='display:flex'>
+        <div class="d-flex align-content-center justify-content-center m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="add_show()">
+            <p class='fs-1'>Add writeup</p>
+        </div>
+        <div class="d-flex align-content-center justify-content-center m-4 col-10 col-md-4 border border-4 border-dark rounded text-center align-items-center p-5 hover-effect" onclick="window.location='/writeups';">
+            <p class='fs-1'>Remove writeup</p>
+        </div>
+    </div>
+    <div class="my-4 add" style='display:none'>
+        <div class="row justify-content-center">
+            <form class="col-11 col-md-9">
+                <div class="form-group my-4">
+                    <label for="Name">Writeup name</label>
+                    <input type="Name" class="form-control" id="Name" aria-describedby="Name" placeholder="Enter Writeup name">
+                </div>
+                <div class="form-group my-4">
+                    <label for="Category">Category</label>
+                    <input type="Category" class="form-control" id="Category" aria-describedby="Category" placeholder="Enter category">
+                </div>
+                <div class="form-group my-4">
+                    <label for="Description">Content (Markdown)</label>
+                    <textarea type="Description" class="form-control" id="Description" placeholder="# Challenge ..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+<%- include('partials/footer.ejs') %>
