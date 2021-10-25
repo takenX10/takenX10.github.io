@@ -4,40 +4,56 @@
     <div class="container-fluid justify-content-center">
         <div class="row justify-content-center px-auto">
             <div class="col-9 text-center">
-                <h2> About us </h2>
-            </div>
-            <div class="col-9 text-center">
+                <h2>About us</h2>
                 <p class="c-12"> Actual members of the team:</p>
             </div>
         </div>
-        <!-- Here we should parse all the elements, these are just test ones-->
-        <div class="container-fluid">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-2 col-xs-8 align-content-center d-md-block d-flex justify-content-center">
-                    <img src="/img/davide.jpeg" class="img-fluid" style="max-height: 100%">
-                </div>
-                <div class="col-8">
-                        <!-- TODO: Set the right href for every member-->
-                        <!-- TODO: Add hover effect to the link-->
-                        <a href="x" class="text-reset"><h2 class="pt-4 pt-md-0">Prof. Davide Maiorca - Founder</h2></a>
-                        <p class="fw-bold fs-5 py-4">astralXploit0 - Coach and Captain</p>
-                        <p class="fw-lighter font-monospace fs-5">Categories: Reversing, Pwn, Forensics <br>High School: Computer Science at ITIS Dionigi Scano (Cagliari)<br>Bachelor degree: Computer Science at UNICA (Cagliari) (Ongoing)</p>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-2 col-xs-8 align-content-center d-md-block d-flex justify-content-center">
-                    <img src="/img/daniele.jpg" class="img-fluid" style="max-height: 100%">
-                </div>
-                <div class="col-8">
-                        <!-- TODO: Set the right href for every member-->
-                        <!-- TODO: Add hover effect to the link-->
-                        <a href="x" class="text-reset"><h2 class="pt-4 pt-md-0">Daniele Pusceddu</h2></a>
-                        <p class="fw-bold fs-5 py-4">daniele - Member since: 2019</p>
-                        <p class="fw-lighter font-monospace fs-5">Categories: Pwn, OSINT, Misc <br>Assistant Professor of Computer Engineering @ University of Cagliari, Italy</p>
-                </div>
+        <div class="row justify-content-center mx-0">
+            <div class="members-container">
             </div>
         </div>
-
+        <script>
+            function parse_members(json){
+                json = decodeURIComponent(json);
+                json = JSON.parse(json);
+                var container = document.getElementsByClassName('members-container');
+                container = container[0];
+                json['members'].forEach( member =>{
+                    var first_div = document.createElement('div');
+                    first_div.setAttribute('class', 'row justify-content-center mt-5');
+                    var second_div = document.createElement('div');
+                    second_div.setAttribute('class', 'col-12 col-sm-3 col-lg-2 align-content-center d-inline-flex justify-content-center');
+                    var img = document.createElement('img');
+                    img.setAttribute('src','/img/'+member['Image']);
+                    img.setAttribute('class','img-fluid');
+                    img.setAttribute('style','object-fit: contain;');
+                    second_div.appendChild(img);
+                    first_div.appendChild(second_div);
+                    var third_div = document.createElement('div');
+                    third_div.setAttribute('class','col-12 col-sm-7 col-lg-6');
+                    third_div.setAttribute('style','max-height:70%;');
+                    var name = document.createElement('a');
+                    name.setAttribute('class','text-reset');
+                    name.setAttribute('href',member['Link']);
+                    var name_h2 = document.createElement('h2');
+                    name_h2.setAttribute('class','pt-4 pt-md-0');
+                    name_h2.innerText = member['Name'];
+                    name.appendChild(name_h2);
+                    third_div.appendChild(name);
+                    var first_p = document.createElement('p');
+                    first_p.setAttribute('class','fw-bold fs-5 py-4');
+                    first_p.innerText = member['Nickname'] + ' - Member since: '+member['Year'];
+                    third_div.appendChild(first_p);
+                    var second_p = document.createElement('p');
+                    second_p.setAttribute('class','fw-lighter font-monospace fs-5');
+                    second_p.innerText = member['Description'];
+                    third_div.appendChild(second_p);
+                    first_div.appendChild(third_div);
+                    container.appendChild(first_div);
+                });
+            }
+            parse_members("<%- content %>");
+        </script>
 
     </div>
 

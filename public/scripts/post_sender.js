@@ -1,4 +1,5 @@
-async function postData(url = '', data = {}) {
+
+async function postData(url, data) {
     const response = await fetch(url, {
         method: 'POST',
         mode: 'cors', 
@@ -10,6 +11,6 @@ async function postData(url = '', data = {}) {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
+    });     
+    return response.json();
 }
