@@ -2,14 +2,20 @@
 const express = require('express'),
 app = express();
 const multer = require("multer");
+const jwt = require('jsonwebtoken');
 var bodyParser = require("body-parser");
 var crypto = require('crypto');
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
+var cookieParser = require('cookie-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + '/public'));
+const SECRETKEY = 'secret';
+// testpsw
+const PASSWORDHASH = 'd28f3b046c289ac7c1da0529e3e313988bf9cf51514ef469cc62411d52e208e0f133111bcb513feb0672936c1cb1f9e1726673faffc968d701543b7992cfdc53';
+
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -19,7 +25,7 @@ var storage = multer.diskStorage({
     cb(null, file.originalname)
   }
 })
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage });
 
 const handleError = (err, res) => {
   res.end(JSON.stringify({'value':'ERROR!'}));
@@ -36,10 +42,12 @@ app.get('/', (req, res) => {
 app.get('/index', (req, res) => {
   res.render('index');
 });
+
 app.get('/writeups', (req, res) => {
   const data = fs.readFileSync('json/writeups.json', 'utf8');
   res.render('writeups', {content: escape(data)});
 });
+
 app.get('/writeup-viewer', (req, res) => {
   var json = fs.readFileSync('json/writeups.json', 'utf8');
   json = JSON.parse(json);
@@ -66,21 +74,76 @@ app.get('/about-us', (req, res) => {
 });
 
 // SrdnlenIsTheKing :)
-app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/manager', (req, res) => {
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/login', (req, res) =>{
+  res.render('login');
+});
+
+app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/login', (req, res) =>{
+  var body = req.body;
+  var username = body['username'];
+  var password = body['password'];
+  var hash = crypto.createHash('sha512');
+  var hashedpsw = hash.update(password, 'utf-8');
+  hashedpsw = hashedpsw.digest('hex');
+
+  if(username === 'admin' && hashedpsw === PASSWORDHASH){
+    var user = {
+      'username':username,
+      'password':password
+    };
+    jwt.sign({user:user}, SECRETKEY, (err,token)=>{
+      res.cookie('authcookie',token, {maxAge:3600000, httpOnly:true});
+      res.json({'status':'correct'});
+    });
+  }else{
+    res.json({'status':'Error!'});
+  }
+});
+
+function verify_jwt(req, res, next){
+  if(req.headers['cookie'] !== null){
+    var cookies = req.headers['cookie'].split(';');
+    var token = '';
+    cookies.forEach(element =>{
+      try{
+        element = element.split('=');
+        if (element[0] == 'authcookie'){
+          token = element[1];
+        }
+      }catch{
+      }
+    });
+    if(token !== ''){
+      jwt.verify(token, SECRETKEY, (err,data)=>{
+        if(err){
+          res.json({'status':'Forbidden!'});
+        }else{
+          next();
+        }
+      });
+    }else{
+      res.json({'status':'Forbidden!'});
+    }
+  }else{
+    res.json({'status':'Forbidden!'});
+  }
+}
+
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/manager', verify_jwt, (req, res) => {
   res.render('manager');
 });
 
-app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/members-manager', (req, res) => {
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/members-manager',verify_jwt, (req, res) => {
   const data = fs.readFileSync('json/members.json', 'utf8');
   res.render('members-manager',{content: escape(data)});
 });
 
-app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/writeups-manager', (req, res) => {
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/writeups-manager',verify_jwt, (req, res) => {
   const data = fs.readFileSync('json/writeups.json', 'utf8');
   res.render('writeups-manager',{content: escape(data)});
 });
 
-app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/images-manager', (req, res) => {
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/images-manager',verify_jwt, (req, res) => {
   var directoryPath = path.join(__dirname, 'public/img');
   fs.readdir(directoryPath, function (err, files) {
     if (err) {
@@ -99,7 +162,7 @@ app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/image
   
 });
 
-app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-manager', (req, res) => {  
+app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-manager',verify_jwt, (req, res) => {  
   var tipo = req.body['type'];
   delete req.body.type
   try{
@@ -122,11 +185,11 @@ app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-
   }
 });
 
-app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/img-upload', upload.single("img"), (req, res, next) => {
+app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/img-upload',verify_jwt, upload.single("img"), (req, res, next) => {
   res.sendStatus(200);
 });
 
-app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/remove-manager', (req, res) => {
+app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/remove-manager',verify_jwt, (req, res) => {
   var tipo = req.body['type'];
   delete req.body.type
   try{

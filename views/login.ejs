@@ -1,0 +1,39 @@
+<%- include('partials/head.ejs') %>
+<link rel="stylesheet" href="../styles/button-hover.css">
+<script src='/scripts/post_sender.js'></script>
+<%- include('partials/navbar.ejs') %>
+<body class='container-fluid'>
+    <form action='./login' method='POST'>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <script>
+        const form = document.querySelector('form');
+        if(form != null){
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                var data = {
+                    "username": form[0].value,
+                    "password": form[1].value
+                };
+                postData('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/login',data)
+                .then((res) =>{
+                  console.log(res);
+                  if(res.status == 'Error!' || res.status == 'Forbidden!'){
+                    console.log('error, wrong psw!');
+                  }else{
+                    window.location= '/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/manager';
+                  }
+                });
+            });
+        }
+      </script>
+
+<%- include('partials/footer.ejs') %>
