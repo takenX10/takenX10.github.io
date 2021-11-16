@@ -3,10 +3,9 @@
 
 <title>Srdnlen – UniCA CTF Team</title>
 <link rel="stylesheet" href="style.css">
-<body class="container-fluid mx-0">    
-    <!-- THUMBNAIL -->
+<body class="container-fluid mx-0">
     <div class="row justify-content-center">
-        <div class="col-12 col-sm-11 col-md-10 col-lg-7 col-xl-5 justify-content-center">
+        <div class="col-12 col-sm-11 col-md-10 col-lg-7 col-xl-5 justify-content-center news-container">
                 <img src="img/squadra3.jpg" class="main-img img-fluid">
                 <p class="fs-4 mt-3">SRDNLEN is a sardinian CTF team born after Cyberchallenge.IT 2019.</p>
                 <h2 class="fw-bold mb-3">Last News</h2>
@@ -18,6 +17,39 @@
             </div>
         </div>
     </div>
+    <script>
+        // parse the last 3 news
+        function add_news(news){
+            var container = document.getElementsByClassName('news-container');
+            container = container[0];
+            var h3 = document.createElement('h3');
+            h3.setAttribute('class','fw-bold mb-0');
+            h3.innerText = news['Name'];
+            container.appendChild(h3);
+            var p = document.createElement('p');
+            p.setAttribute('class','text-secondary mt-0 mb-2');
+            p.innerText = news['date'];
+            container.appendChild(p);
+            var img = document.createElement('img');
+            img.setAttribute('src','img/'+news['previewimage']);
+            img.setAttribute('class','img-fluid mt-3 mb-2');
+            container.appendChild(img);
+            var desc = document.createElement('p');
+            desc.setAttribute('class','fs-4');
+            desc.innerText = news['description'];
+            container.appendChild(desc);
+        }
+
+        var newslist = JSON.parse('{"content":'+decodeURIComponent("<%- content -%>")+'}');
+        newslist = newslist['content'];
+        console.log(newslist);
+
+        newslist.forEach( news =>{
+            console.log(news);
+            add_news(news);
+        });
+
+    </script>
 
 <%- include('partials/footer.ejs') %>
 

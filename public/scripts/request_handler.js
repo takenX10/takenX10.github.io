@@ -22,6 +22,15 @@ window.onload = function(){
                     "Category":form_add[2].value,
                     "Content":form_add[3].value,
                 }   
+            }else if(form_add[0].value == 'news'){
+                var data = {
+                    "type":form_add[0].value,
+                    "Name":form_add[1].value,
+                    "date":form_add[2].value,
+                    "previewimage":form_add[3].value,
+                    "description":form_add[4].value,
+                    "Content":form_add[5].value,
+                }   
             }
             postData('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-manager',data)
             .then(data => {

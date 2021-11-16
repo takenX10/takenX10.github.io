@@ -40,7 +40,21 @@ app.get('/', (req, res) => {
 });
 
 app.get('/index', (req, res) => {
-  res.render('index');
+  var newslist = fs.readFileSync('json/news.json', 'utf8');
+  newslist = JSON.parse(newslist)['news'];
+  if(newslist != undefined){
+    if(newslist.length > 3){
+      newslist = newslist.slice(0,2);
+    }
+    console.log(newslist);
+    res.render('index', {content:escape(JSON.stringify(newslist))});
+  }else{
+    res.render('index',{content:''});
+  }
+});
+
+app.get('/cyberchallenge', (req, res) => {
+  res.render('cyberchallenge');
 });
 
 app.get('/writeups', (req, res) => {
@@ -65,6 +79,31 @@ app.get('/writeup-viewer', (req, res) => {
     res.status(404).send("Not found.");
   }else{
     res.render('writeup-viewer', {content: escape(JSON.stringify(data))});
+  }
+});
+
+app.get('/news', (req, res) => {
+  const data = fs.readFileSync('json/news.json', 'utf8');
+  res.render('news', {content: escape(data)});
+});
+
+app.get('/news-viewer', (req, res) => {
+  var json = fs.readFileSync('json/news.json', 'utf8');
+  json = JSON.parse(json);
+  var id = req.query.id;
+  // TODO: check if the id is a valid id
+  var data;
+  json['news'].every(news =>{
+    if(news['id'] === id){
+      data = news;
+      return false;
+    }
+    return true;
+  });
+  if(data === null){
+    res.status(404).send("Not found.");
+  }else{
+    res.render('news-viewer', {content: escape(JSON.stringify(data))});
   }
 });
 
@@ -101,7 +140,7 @@ app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/logi
 });
 
 function verify_jwt(req, res, next){
-  if(req.headers['cookie'] !== null){
+  if(req.headers['cookie'] !== null && req.headers['cookie'] !== undefined){
     var cookies = req.headers['cookie'].split(';');
     var token = '';
     cookies.forEach(element =>{
@@ -143,6 +182,11 @@ app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/write
   res.render('writeups-manager',{content: escape(data)});
 });
 
+app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/news-manager',verify_jwt, (req, res) => {
+  const data = fs.readFileSync('json/news.json', 'utf8');
+  res.render('news-manager',{content: escape(data)});
+});
+
 app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/images-manager',verify_jwt, (req, res) => {
   var directoryPath = path.join(__dirname, 'public/img');
   fs.readdir(directoryPath, function (err, files) {
@@ -163,6 +207,7 @@ app.get('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/image
 });
 
 app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-manager',verify_jwt, (req, res) => {  
+  console.log(req.body);
   var tipo = req.body['type'];
   delete req.body.type
   try{
@@ -178,6 +223,13 @@ app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/add-
       console.log(req.body['id']);
       final_json['writeups'].push(req.body);
       fs.writeFileSync('json/writeups.json', JSON.stringify(final_json));
+    }else if(tipo == 'news'){
+      const filecontent = fs.readFileSync('json/news.json', 'utf8');
+      var final_json = JSON.parse(filecontent);
+      req.body['id'] = crypto.createHash('sha256').update(req.body['Name']).digest('hex');
+      console.log(req.body['id']);
+      final_json['news'].push(req.body);
+      fs.writeFileSync('json/news.json', JSON.stringify(final_json));
     }
     res.status(200).send(JSON.stringify({"value":"correct!"}));
   }catch(errorValue){
@@ -189,6 +241,8 @@ app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/img-
   res.sendStatus(200);
 });
 
+// TODO: Refactor a lot of code, especially members, news and writeups are basically the same
+// and they need to be merged together.
 app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/remove-manager',verify_jwt, (req, res) => {
   var tipo = req.body['type'];
   delete req.body.type
@@ -229,6 +283,24 @@ app.post('/e390cd59e40e7dc601c9a8c1cde91417e6cc18bd950f8f061fff24b1b23b81b6/remo
         j++;
       });
       fs.writeFileSync('json/writeups.json', JSON.stringify(final_json));
+    }else if(tipo == 'news'){
+      const filecontent = fs.readFileSync('json/news.json', 'utf8');
+      var final_json = JSON.parse(filecontent);
+      var lista = req.body['list'];
+      var removelist = [];
+      var i = 0;
+      final_json['news'].forEach(elem =>{
+        if(lista.includes(elem['Name'])){
+          removelist.push(i);
+        }
+        i++;
+      });
+      var j = 0;
+      removelist.forEach(i =>{
+        final_json['news'].splice(i-j,1);
+        j++;
+      });
+      fs.writeFileSync('json/news.json', JSON.stringify(final_json));
     }else if(tipo == 'images'){
       var lista_immagini = req.body['list'];
       lista_immagini.forEach(imgname => {

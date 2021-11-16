@@ -1,0 +1,32 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/navbar.ejs') %>
+<body class="container-fluid">
+    <div class="row justify-content-center mt-4">
+        <div class="col-9">
+            <h1 class="fw-bold mb-4">News</h1>
+            <p class="fs-4">List of all the teams news.</p>
+            <ul class="list-group list-group-flush fs-5 mt-4 news-container">
+            </ul>
+        </div>
+        <script>
+            function parse_news(json){
+                json = decodeURIComponent(json);
+                json = JSON.parse(json);
+                var container = document.getElementsByClassName('news-container');
+                container = container[0];
+                json['news'].forEach(news =>{
+                    var li = document.createElement('li');
+                    li.setAttribute('class','list-group-item');
+                    var a = document.createElement('a');
+                    a.setAttribute('href','news-viewer?id='+news['id']);
+                    a.setAttribute('class','text-reset');
+                    a.innerText = news['Name'];
+                    li.appendChild(a);
+                    container.appendChild(li);
+                });
+            }
+            parse_news("<%- content %>");
+        </script>
+    </div>
+
+<%- include('partials/footer.ejs') %>

@@ -9,6 +9,8 @@ function parseElements(json){
         json = json['writeups'];
     }else if(json['images']){
         json = json['images'];
+    }else if(json['news']){
+        json = json['news'];
     }
     json.forEach(element => {
         var name = element['Name'];
