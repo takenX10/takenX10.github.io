@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="halloween">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alessandro Frau</title>
+    <link href="/public/styles/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="/public/scripts/tailwind.js"></script>
 </head>
-<body>
-    <h1></h1>
+<body class="flex justify-center flex-wrap flex-col">
+    <h1 class="text-5xl my-20 text-center font-extrabold">Materiale Web Security di Alessandro Frau</h1>
+    <div class="flex justify-center flex-wrap">
+        <button onclick="window.location='/web-security.pdf'"  class="m-5 btn btn-outline btn-primary text-xl">Slides</button>
+        <button class="m-5 btn btn-outline btn-primary text-xl btn-disabled">Registrazione</button>
+        <button class="m-5 btn-disabled btn btn-outline btn-primary text-xl">Guida tools</button>
+    </div>
 </body>
 
 </html>
